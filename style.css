@@ -4,8 +4,20 @@
   justify-content: space-between;
 }
 
+#screen {
+  margin: 2em;
+  display: flex;
+  justify-content: space-around;
+}
+
+.display {
+  flex: 1;
+  max-width: 200px;
+}
+
 #machine {
   margin: 2em;
   display: flex;
   justify-content: center;
+  align-content: stretch;
 }
