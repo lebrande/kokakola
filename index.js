@@ -1,11 +1,12 @@
 import { fromEvent, of, combineLatest } from 'rxjs';
-import { filter, map, scan, startWith, withLatestFrom, repeat, takeWhile, pairwise, tap } from 'rxjs/operators';
+import { filter, map, scan, startWith, withLatestFrom } from 'rxjs/operators';
 
 const buttons = document.querySelectorAll('.coin');
 const creditDisplay = document.getElementById('credit');
 const chargeDisplay = document.getElementById('charge');
 const changeDisplay = document.getElementById('change');
 const machine = document.getElementById('machine');
+const can = document.getElementById('can');
 
 const coin$ = fromEvent(buttons, 'click').pipe(
   map((e) => +e.currentTarget.innerText),
@@ -15,13 +16,13 @@ const charge$ = of(880);
 
 const credit$ = coin$.pipe(
   startWith(0),
-  scan((credit, coin) => credit + coin, 0),
-  pairwise(),
-  startWith([0, 0]),
   withLatestFrom(charge$),
-  takeWhile(([[credit], charge]) => credit < charge),
-  map(([[, credit]]) => credit),
-  repeat(),
+  scan((credit, [coin, charge]) => {
+    if (credit > charge) {
+      return coin;
+    }
+    return credit + coin;
+  }, 0),
 );
 
 const purchase$ = combineLatest(
@@ -36,14 +37,26 @@ const change$ = combineLatest(
   charge$,
 ).pipe(
   map(([credit, charge]) => {
-    if (credit > charge) {
+    if (credit >= charge) {
       return credit - charge;
     }
     return 0;
   }),
 );
 
-credit$.subscribe((credit) => {
+const creditDisplay$ = combineLatest(
+  credit$,
+  charge$,
+).pipe(
+  map(([credit, charge]) => {
+    if (credit >= charge) {
+      return 0;
+    }
+    return credit;
+  }),
+);
+
+creditDisplay$.subscribe((credit) => {
   creditDisplay.innerText = credit;
 });
 
@@ -57,7 +70,9 @@ change$.subscribe((change) => {
 
 purchase$.subscribe(() => {
   machine.classList.add('shake');
+  can.classList.add('pullDown');
   setTimeout(() => {
     machine.classList.remove('shake');
+    can.classList.remove('pullDown');
   }, 500);
 });
