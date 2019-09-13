@@ -70,9 +70,11 @@ change$.subscribe((change) => {
 
 purchase$.subscribe(() => {
   machine.classList.add('shake');
-  can.classList.add('pullDown');
   setTimeout(() => {
     machine.classList.remove('shake');
-    can.classList.remove('pullDown');
+    can.classList.add('pullDown');
   }, 500);
+  setTimeout(() => {
+    can.classList.remove('pullDown');
+  }, 1000);
 });
