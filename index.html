@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
   <link rel="stylesheet" href="./style.css">
   <title>1# Streams</title>
 </head>
@@ -24,13 +25,15 @@
     </div>
     <div class="display">
       <label for="charge" class="label">Charge</label>
-      <div class="input" id="charge">
-        800
-      </div>
+      <div class="input" id="charge"></div>
+    </div>
+    <div class="display">
+      <label for="change" class="label">Change</label>
+      <div class="input" id="change"></div>
     </div>
   </div>
-  <section id="machine">
-    <img src="./images/vending-machine.jpg">
+  <section id="machine-container">
+    <img id="machine" class="animated" src="./images/vending-machine.jpg">
   </section>
   <script src="./index.js"></script>
 </body>
